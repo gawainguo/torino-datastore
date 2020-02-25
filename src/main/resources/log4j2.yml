@@ -1,0 +1,33 @@
+
+Configutation:
+  status: warn
+
+  Appenders:
+    Console:
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+    RollingFile:
+      name: RollingFile
+      fileName: "logs/torino-fetcher.log"
+      filePattern: "logs/$${date:yyyy-MM}/torino-fetch-%d{yyyy-MM-dd}-%i.log.gz"
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+      Policies:
+          TimeBasedTriggeringPolicy:
+            modulate: true
+            interval: 1
+
+  Loggers:
+      Root:
+        level: debug
+        AppenderRef:
+          - ref: Console
+          - ref: RollingFile
+      Logger:
+        name: org.springframework.web
+        level: info
+        AppenderRef:
+          - ref: Console
+          - ref: RollingFile
