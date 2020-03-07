@@ -1,0 +1,79 @@
+<!DOCTYPE generatorConfiguration
+    PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+    "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <!-- 导入配置文件 -->
+    <properties resource="application.yml"/>
+    <!-- defaultModelType="flat" s设置复合主键时不单独为主键创建实体 -->
+    <context defaultModelType="flat" id="MySql" targetRuntime="MyBatis3">
+
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!-- 当表名或者字段名为SQL关键字的时候，可以设置该属性为true，MBG会自动给表名或字段名添加分隔符(反单引号) -->
+        <property name="autoDelimitKeywords" value="true"/>
+
+        <!-- 由于beginningDelimiter和endingDelimiter的默认值为双引号(")，在Mysql中不能这么写，所以还要将这两个默认值改为反单引号(`)， -->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <!-- 生成的POJO实现java.io.Serializable接口 -->
+        <!--<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />-->
+        <plugin type="com.itfsw.mybatis.generator.plugins.LombokPlugin">
+            <!-- @Builder 必须在 Lombok 版本 >= 1.18.2 的情况下 -->
+            <property name="@Builder" value="true"/>
+            <!-- @NoArgsConstructor 和 @AllArgsConstructor 使用规则和Lombok一致 -->
+            <property name="@AllArgsConstructor" value="true"/>
+            <property name="@NoArgsConstructor" value="true"/>
+        </plugin>
+        <!-- Example Criteria 增强插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.ExampleEnhancedPlugin">
+            <!-- 是否支持已经过时的andIf方法（推荐使用when代替），默认支持 -->
+            <property name="enableAndIf" value="false"/>
+        </plugin>
+        <!-- Example 目标包修改插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.ExampleTargetPlugin">
+            <!-- 修改Example类生成到目标包下 -->
+            <property name="targetPackage" value="com.jiaqi.torino.datastore.dao.example"/>
+        </plugin>
+        <!--override mapper xml instead of append-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <!--注释-->
+        <commentGenerator>
+            <!-- 阻止生成注释 -->
+            <property name="suppressAllComments" value="true"/>
+            <!-- 注释里不添加日期 -->
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+        <!-- 数据库连接，直接通过${}读取application.properties里的配置 -->
+        <jdbcConnection
+            connectionURL="jdbc:mysql://10.225.30.176:3306/torino_news?rewriteBatchedStatements=true"
+            driverClass="com.mysql.jdbc.Driver"
+            password="welcome"
+            userId="root"/>
+
+        <!-- <javaTypeResolver type="com.jiaqi.torino.datastore.config.JDBCTypeResolver"/> -->
+        <javaTypeResolver>
+            <property name="useJSR310Types" value="true" />
+        </javaTypeResolver>
+        <!-- 生成POJO对象，并将类放到com.web.springbootmybatis.entity包下 -->
+        <javaModelGenerator targetPackage="com.jiaqi.torino.datastore.model.entity"
+            targetProject="src/main/java"/>
+        <!-- 生成mapper xml文件，并放到resources下的mapper文件夹下 -->
+        <sqlMapGenerator targetPackage="mapper"
+            targetProject="src/main/resources"/>
+
+        <!-- 生成mapper xml对应dao接口，放到com.web.springbootmybatis.dao包下-->
+        <javaClientGenerator targetPackage="com.jiaqi.torino.datastore.dao" targetProject="src/main/java"
+            type="XMLMAPPER"/>
+
+        <!-- table标签可以有多个，至少一个，tableName指定表名，可以使用_和%通配符 -->
+        <table domainObjectName="News" enableCountByExample="false"
+               enableDeleteByExample="true" enableInsert="true"
+               enableSelectByExample="true" enableUpdateByExample="true"
+               mapperName="NewsDao" selectByExampleQueryId="false"
+               tableName="news">
+            <property name="useActualColumnNames" value="true"/>
+            <generatedKey column="id" identity="true" sqlStatement="MySql"/>
+        </table>
+    </context>
+</generatorConfiguration>
