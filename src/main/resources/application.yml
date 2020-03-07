@@ -1,1 +1,60 @@
+server:
+  port: 8080
 
+app:
+  mq:
+    news-topic: torino-news-msg
+
+spring:
+  application:
+    name: torino-datastore
+    cloud:
+      service-registry:
+        auto-registration:
+          enabled: false
+  kafka:
+    listener:
+      concurrency: 10
+    bootstrap-servers: 10.225.17.57:9092,10.225.17.57:9091
+    consumer:
+      group-id: torino-news-consumer
+      auto-offset-reset: earliest
+
+  datasource:
+    url: jdbc:mysql://10.225.30.176:3306/torino_news?rewriteBatchedStatements=true
+    password: welcome
+    username: root
+    druid:
+      initial-size: 10
+      max-active: 30
+      min-idle: 10
+      max-wait:  3000
+      stat-view-servlet:
+        url-pattern: "/druid/*"
+        reset-enable: false
+        login-username: admin
+        login-password: admin
+
+  redis:
+    host: 10.225.17.57
+    port: 6379
+    password: torino_redis@Torino!
+    database: 0
+
+eureka:
+  instance:
+    instance-id: torino-datastore
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://10.225.30.175:19000/eureka
+
+# eureka:
+#   client:
+#     enabled: false
+#     serviceUrl:
+#       registerWithEureka: false
+      
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
