@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 19002
 
 app:
   mq:
@@ -8,10 +8,6 @@ app:
 spring:
   application:
     name: torino-datastore
-    cloud:
-      service-registry:
-        auto-registration:
-          enabled: false
   kafka:
     listener:
       concurrency: 10
@@ -43,7 +39,6 @@ spring:
 
 eureka:
   instance:
-    instance-id: torino-datastore
     prefer-ip-address: true
   client:
     service-url:
