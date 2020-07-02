@@ -7,7 +7,17 @@ app:
 
 spring:
   application:
-    name: torino-datastore
+    name: torino-datastore-local
+
+  cloud:
+    consul:
+      host: 10.225.25.89
+      port: 32357
+      discovery:
+        healthCheckPath: /actuator/health
+        healthCheckInterval: 10s
+        instanceId: localhost
+        preferIpAddress: true
   kafka:
     listener:
       concurrency: 10
@@ -37,19 +47,14 @@ spring:
     password: torino_redis@Torino!
     database: 0
 
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://10.225.30.175:19000/eureka
-
-# eureka:
-#   client:
-#     enabled: false
-#     serviceUrl:
-#       registerWithEureka: false
-      
-
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+    info:
+      enabled: true
+    health:
+      enabled: true
